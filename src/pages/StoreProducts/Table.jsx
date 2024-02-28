@@ -21,12 +21,21 @@ const Table = (props) => {
               <tr key={rowIndex}>
                 {tablehead.map((header, cellIndex) => {
                   const isImage = header === 'image_link';
+                  const title = header === 'title';
+                  const link = header === 'link';
+                  const description = header === 'description';
                   return (
                     <td
                       key={cellIndex}
                       className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11"
                     >
-                      <div style={{ overflow: 'auto', maxHeight: '150px' }}>
+                      <div
+                        className={
+                          ((title || link) &&
+                            'w-[280px] overflow-hidden text-') ||
+                          (description && 'overflow-auto max-h-[200px]')
+                        }
+                      >
                         {isImage ? (
                           <img src={row[header]} width={70} />
                         ) : (
