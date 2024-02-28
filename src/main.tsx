@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 // @ts-ignore
 import App from './App';
 import './index.css';
@@ -10,10 +10,10 @@ import { InternalFieldsContextProvider } from './context/InternalFieldsContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLBodyElement).render(
   <React.StrictMode>
-    <Router>
+    <HashRouter>
       <InternalFieldsContextProvider>
         <App />
       </InternalFieldsContextProvider>
-    </Router>
+    </HashRouter>
   </React.StrictMode>,
 );
