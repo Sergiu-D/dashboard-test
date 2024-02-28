@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 
 // Components
 import SelectInput from './SelectInput';
@@ -11,7 +11,8 @@ import { actionsOptions, searchTabsOptions } from '../../inputValues';
 // Utils
 import generateKey from '../../utils/generateKey';
 
-export default function ActionsLayout(props) {
+const ActionsLayout = memo((props) => {
+  // const ActionsLayout = (props) => {
   const { attribute, objectPath } = props;
   const { formData, setInputValue } = useContext(FormContext);
 
@@ -59,4 +60,6 @@ export default function ActionsLayout(props) {
       })}
     </>
   );
-}
+});
+
+export default ActionsLayout;

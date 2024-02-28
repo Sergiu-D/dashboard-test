@@ -1,10 +1,12 @@
 import React, { createContext, useState } from 'react';
 import { attributesMap } from '../templates';
+import { useForm } from 'react-hook-form';
 
 const FormContext = createContext();
 
 const FormContextProvider = ({ children }) => {
   const [formData, setFormData] = useState(attributesMap);
+  // const methods = useForm();
 
   const handleToggleRules = (path) => {
     setFormData((prev) => {

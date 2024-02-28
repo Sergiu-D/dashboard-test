@@ -6,16 +6,14 @@ import App from './App';
 import './index.css';
 import './satoshi.css';
 
-// Context
-// @ts-ignore
-import { FormContextProvider } from './context/FormContext';
+import { InternalFieldsContextProvider } from './context/InternalFieldsContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLBodyElement).render(
   <React.StrictMode>
     <Router>
-      <FormContextProvider>
+      <InternalFieldsContextProvider>
         <App />
-      </FormContextProvider>
+      </InternalFieldsContextProvider>
     </Router>
   </React.StrictMode>,
 );

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 import SelectInput from './SelectInput';
 import ToggleSwitch from './ToggleSwitch';
 
@@ -10,7 +10,7 @@ import { FormContext } from '../../context/FormContext';
 // Utils
 import generateKey from '../../utils/generateKey';
 
-export default function RulesSetLayout(props) {
+const RulesSetLayout = memo((props) => {
   const { ruleSet, attributeName, objectPath } = props;
   const { handleAddNewItem } = useContext(FormContext);
 
@@ -40,4 +40,6 @@ export default function RulesSetLayout(props) {
       })}
     </>
   );
-}
+});
+
+export default RulesSetLayout;
