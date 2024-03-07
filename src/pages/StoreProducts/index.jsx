@@ -1,253 +1,122 @@
-import { useState, useReducer } from 'react';
+import { useState } from 'react';
 import STORE_PRODUCTS from '../../storeProducts';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '../../components/ui/table';
 
-import { Search } from 'lucide-react';
-import Table from './Table';
-// import {
-//   Table,
-//   TableBody,
-//   TableCaption,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from '../../components/ui/table';
+import {
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getFacetedMinMaxValues,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getGroupedRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 
-// import {
-//   // ColumnDef,
-//   flexRender,
-//   getCoreRowModel,
-//   useReactTable,
-// } from '@tanstack/react-table';
+import DataTableViewOptions from './DataTableViewOptions';
+import Pagination from './Pagination';
 
-// const defaultData = [
-//   {
-//     firstName: 'tanner',
-//     lastName: 'linsley',
-//     age: 24,
-//     visits: 100,
-//     status: 'In Relationship',
-//     progress: 50,
-//   },
-//   {
-//     firstName: 'tandy',
-//     lastName: 'miller',
-//     age: 40,
-//     visits: 40,
-//     status: 'Single',
-//     progress: 80,
-//   },
-//   {
-//     firstName: 'joe',
-//     lastName: 'dirte',
-//     age: 45,
-//     visits: 20,
-//     status: 'Complicated',
-//     progress: 10,
-//   },
-// ];
+import SearchTable from './SearchTable';
 
-// const defaultColumns = [
-//   {
-//     accessorKey: 'firstName',
-//     cell: (info) => info.getValue(),
-//     footer: (props) => props.column.id,
-//   },
-//   {
-//     accessorFn: (row) => row.lastName,
-//     id: 'lastName',
-//     cell: (info) => info.getValue(),
-//     header: () => <span>Last Name</span>,
-//     footer: (props) => props.column.id,
-//   },
-//   {
-//     accessorKey: 'age',
-//     header: () => 'Age',
-//     footer: (props) => props.column.id,
-//   },
-//   {
-//     accessorKey: 'visits',
-//     header: () => <span>Visits</span>,
-//     footer: (props) => props.column.id,
-//   },
-//   {
-//     accessorKey: 'status',
-//     header: 'Status',
-//     footer: (props) => props.column.id,
-//   },
-//   {
-//     accessorKey: 'progress',
-//     header: 'Profile Progress',
-//     footer: (props) => props.column.id,
-//   },
-// ];
+import columns from './columns';
+import ExportToXML from './ExportToXML';
 
-// export default function StoreProducts() {
-//   // const [storeData, setStoreData] = useState(STORE_PRODUCTS);
-//   const [data, setData] = useState(defaultData);
-//   const [columns] = useState(() => [...defaultColumns]);
-//   const [columnVisibility, setColumnVisibility] = useState({});
-
-//   const rerender = useReducer(() => ({}), {})[1];
-
-//   const table = useReactTable({
-//     data,
-//     columns,
-//     state: {
-//       columnVisibility,
-//     },
-//     onColumnVisibilityChange: setColumnVisibility,
-//     getCoreRowModel: getCoreRowModel(),
-//     debugTable: true,
-//     debugHeaders: true,
-//     debugColumns: true,
-//   });
-
-// const tableHead = [
-//   'Id',
-//   'title',
-//   'link',
-//   'price',
-//   'image_link',
-//   'description',
-// ];
-
-// const tableBody = mapProducts(storeData);
-
-//   const handleSearchChange = (e) => {
-//     const products = storeData.filter((product) => {
-//       return product.productName
-//         .toLowerCase()
-//         .includes(e.target.value.toLowerCase());
-//     });
-
-//     setStoreData(products);
-//   };
-
-//   return (
-//     <div className="p-2">
-//       <div className="inline-block border border-black shadow rounded">
-//         <div className="px-1 border-b border-black">
-//           <label>
-//             <input
-//               {...{
-//                 type: 'checkbox',
-//                 checked: table.getIsAllColumnsVisible(),
-//                 onChange: table.getToggleAllColumnsVisibilityHandler(),
-//               }}
-//             />{' '}
-//             Toggle All
-//           </label>
-//         </div>
-//         {table.getAllLeafColumns().map((column) => {
-//           return (
-//             <div key={column.id} className="px-1">
-//               <label>
-//                 <input
-//                   {...{
-//                     type: 'checkbox',
-//                     checked: column.getIsVisible(),
-//                     onChange: column.getToggleVisibilityHandler(),
-//                   }}
-//                 />{' '}
-//                 {column.id}
-//               </label>
-//             </div>
-//           );
-//         })}
-//       </div>
-//       <div className="h-4" />
-//       <table>
-//         <thead>
-//           {table.getHeaderGroups().map((headerGroup) => (
-//             <tr key={headerGroup.id}>
-//               {headerGroup.headers.map((header) => (
-//                 <th key={header.id} colSpan={header.colSpan}>
-//                   {header.isPlaceholder
-//                     ? null
-//                     : flexRender(
-//                         header.column.columnDef.header,
-//                         header.getContext(),
-//                       )}
-//                 </th>
-//               ))}
-//             </tr>
-//           ))}
-//         </thead>
-//         <tbody>
-//           {table.getRowModel().rows.map((row) => (
-//             <tr key={row.id}>
-//               {row.getVisibleCells().map((cell) => (
-//                 <td key={cell.id}>
-//                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
-//                 </td>
-//               ))}
-//             </tr>
-//           ))}
-//         </tbody>
-//         <tfoot>
-//           {table.getFooterGroups().map((footerGroup) => (
-//             <tr key={footerGroup.id}>
-//               {footerGroup.headers.map((header) => (
-//                 <th key={header.id} colSpan={header.colSpan}>
-//                   {header.isPlaceholder
-//                     ? null
-//                     : flexRender(
-//                         header.column.columnDef.footer,
-//                         header.getContext(),
-//                       )}
-//                 </th>
-//               ))}
-//             </tr>
-//           ))}
-//         </tfoot>
-//       </table>
-//       <div className="h-4" />
-//       <button onClick={() => rerender()} className="border p-2">
-//         Rerender
-//       </button>
-//       <div className="h-4" />
-//       <pre>{JSON.stringify(table.getState().columnVisibility, null, 2)}</pre>
-//     </div>
-//   );
-// }
+const defaultData = mapProducts(STORE_PRODUCTS);
 
 export default function StoreProducts() {
-  const [storeData, setStoreData] = useState(STORE_PRODUCTS);
+  const [data, setData] = useState(defaultData);
+  const [rowSelection, setRowSelection] = useState({});
+  const [columnVisibility, setColumnVisibility] = useState({});
+  const [columnFilters, setColumnFilters] = useState([]);
+  const [sorting, setSorting] = useState([]);
 
-  const tablehead = [
-    'Id',
-    'title',
-    'link',
-    'price',
-    'image_link',
-    'description',
-  ];
-
-  const tablebody = mapProducts(storeData);
-
-  const handleSearchChange = (e) => {
-    const products = storeData.filter((product) => {
-      return product.productName
-        .toLowerCase()
-        .includes(e.target.value.toLowerCase());
-    });
-
-    setStoreData(products);
-  };
+  const table = useReactTable({
+    data,
+    columns,
+    state: {
+      sorting,
+      columnVisibility,
+      rowSelection,
+      columnFilters,
+    },
+    onRowSelectionChange: setRowSelection,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getGroupedRowModel: getGroupedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: true,
+  });
 
   return (
-    <div className="flex flex-col w-full gap-50">
-      <div className="flex gap-3 relative z-20 w-[50%] appearance-none border-b border-stroke bg-transparent py-2 px-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
-        <Search />
-        <input
-          type="text"
-          onChange={handleSearchChange}
-          className="w-full dark:border-form-strokedark dark:bg-form-input outline-none"
-        />
+    <div className="flex flex-col gap-5">
+      <SearchTable table={table} />
+
+      <div>
+        <Table className="border-collapse border rounded-md border-gray/20">
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className=" text-lg text-bodydark p-0"
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell
+                    key={cell.id}
+                    className="border border-slate-600 border-gray/20 rounded-md max-w-[10vw] text-white"
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
 
-      <Table tablehead={tablehead} tablebody={tablebody} />
+      <div className="flex justify-between sticky bottom-0 -mb-10 -mx-4 md:-mx-6 2xl:-mx-10 bg-black p-5">
+        <div className="flex gap-5">
+          <DataTableViewOptions table={table} />
+          <ExportToXML data={data} />
+        </div>
+        <Pagination table={table} />
+      </div>
     </div>
   );
 }
